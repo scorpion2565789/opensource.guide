@@ -1,26 +1,37 @@
 name: GitHub Actions CI
+
 on:
   push:
-    branches: master
+    branches:
+      - master
   pull_request:
   merge_group:
+
 permissions:
   contents: read
+
 jobs:
   tests:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Git repository
         uses: actions/checkout@v4.2.2
+
       - name: Set up Ruby
-        uses: ruby/setup-ruby@a4effe49ee8ee5b8b5091268c473a4628afb5651 # v1
+        uses: ruby/setup-ruby@v1
         with:
+          ruby-version: 3.2 # specify your Ruby version
           bundler-cache: true
-      - name: Set up Node
+
+      - name: Set up Node.js
         uses: actions/setup-node@v4.4.0
+        with:
+          node-version: 18 # specify your Node.js version
+
       - name: Bootstrap
         run: script/bootstrap
         env:
           SKIP_BUNDLER: true
-      - name: Tests
+
+      - name: Run Tests
         run: script/test
